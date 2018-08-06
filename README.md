@@ -1,0 +1,5 @@
+易二易校园二手项目
+请使用idea或者eclipse等ide打开项目
+初次使用请先用maven导入所有依赖包
+eclipse右键pom.xml文件run-build选项，键入参数spring-boot:run运行。idea类似
+项目访问入口为localhost:8080
