@@ -1,0 +1,130 @@
+@CHARSET "UTF-8";
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	color: #333;
+}
+.page-main {
+	posiotion: relative;
+}
+.page-main .page-main-top {
+	width: 100%;
+	min-height: 700px;
+	position: relative;
+	text-align: center;
+	margin-bottom: 100px;
+	background: url(../images/bk_02.jpg) no-repeat center;
+	background-size:cover;
+}
+
+.page-main .text-box {
+	padding-top: 200px;
+	color: #fff;
+}
+.page-main .text-box h3{
+	font-size:50px;
+}
+.page-main .text-box p{
+	font-size:30px;
+}
+.page-main .page-option {
+	background: #fff;
+	border-radius: 25px;
+	overflow: hidden;
+	width: 800px;
+	position: absolute;
+	bottom: -60px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	z-index: 99;
+	box-shadow: 0 5px 10px #666666;
+}
+
+.page-main .page-option .bk .option {
+	background: rgba(255, 255, 255, 1);
+	font-size: 16px; height : 100%;
+	width:100%;
+	padding: 40px;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	z-index: 999;
+	-webkit-transition: all 0.3s linear;
+	transition: all 0.3s linear;
+	height: 100%;
+}
+.page-main .page-option .bk .option h2{
+	font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+.page-main .page-option .bk {
+	width: 50%;
+	height: 330px;
+	float: left;
+}
+.page-main .page-option .bk .option .icon{
+	color: #52d3aa; font-size: 3em;
+}
+.page-main .page-option .bk .option:hover {
+	background: rgba(0, 0, 0, 0.3);
+	color:white;
+}
+.index-slogn-padding{
+	padding-bottom:30px;
+}
+.circle {
+	border-radius: 40px;
+	height: 80px;
+	margin: 0 auto;
+	text-align: center;
+	background: rgb(82, 211, 170) none repeat scroll 0 0;
+	width: 80px;
+}
+
+.circle span {
+	line-height: 80px;
+	font-size: 2em;
+	color: #fff;
+}
+.slogn{
+	margin:0 auto;
+}
+.slogn h4 {
+	color: #212121;
+	font-size: 1.7em;
+	line-height: 1.5em;
+	margin: 0 0 0.5em;
+	text-transform: capitalize;
+}
+
+.slogn p {
+	color: #999;
+	font-size: 1.3em;
+	line-height: 1.8em;
+}
+
+.f18 {
+	color: #39bc54;
+	font-size: 2.5em;
+	padding-bottom: 0.5em;
+	text-align: center;
+	margin-bottom: 35px;
+}
+.devpic{
+	width:100px;
+	height:100px;
+	border-radius:50%;
+	overflow:hidden;
+	margin:0 auto;
+}
+.devpic img{
+	width:100px;
+	height:100px;
+}
+.guanyu{
+	padding-bottom:50px;
+}

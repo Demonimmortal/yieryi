@@ -1,0 +1,16 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.idleroom.web.mq.CMQUtil",
+      "name": "cmq",
+      "type": "com.idleroom.web.mq.CMQUtil"
+    },
+    {
+      "sourceType": "com.idleroom.web.util.generator.MsgIdGenerator",
+      "name": "worker",
+      "type": "com.idleroom.web.util.generator.MsgIdGenerator"
+    }
+  ],
+  "properties": []
+}

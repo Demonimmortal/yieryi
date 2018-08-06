@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.prg">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>易二易-用户信息</title>
+<link
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/font-awesome.min.css" rel="stylesheet">
+<link href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/user.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet">
+</head>
+<body>
+		<div class="body-loading">
+			<div class="area-center">
+				<div class="spinner"></div>
+			</div>
+		</div>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">易二易</a>
+				</div>
+					<ul class="nav navbar-nav">
+						<li class=""><a class="mode" href="/b">校园二手</a></li>
+						<li class=""><a class="mode" href="/w">校园求购</a></li>
+					</ul>
+
+                    <ul class="nav navbar-nav" th:if="${user?.type=='管理员'}">
+                        <li class="">
+                            <a class="mode" href="/admin">后台管理</a>
+                        </li>
+                    </ul>
+					<ul id="login-before" class="inner-box hide">
+						<li id="login-in" class="module"><a
+							href="javascript:userManage('login-in');" class="fa fa-sign-in">
+						</a></li>
+					</ul>
+					<ul id="inner-box" class="inner-box nav navbar-nav navbar-right">
+					</ul>
+				</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<div class="user-wrap">
+			<div class="user-body">
+				<div class="content">
+					<div class="user-header">
+						<div class="user-pic">
+							<img id="userPic" th:if="${user?.pic==null||user?.pic==''}" src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/avatar.jpg">
+							<img id="userPic" th:unless="${user?.pic==null||user?.pic==''}" th:src="@{'http://unrestraint.oss-cn-beijing.aliyuncs.com/'+${user?.pic}}">
+							<div class="shade-uppic">
+									<div class="left">
+										<div id="previewDiv" class="preview">
+										</div>
+									</div>
+									<div class="right">
+										<a id="selectPic" class="btn btn-primary button" href="javascript:void(0);" onclick="upPic.remove()">选择图片</a>
+										<button id="submitPic" class="btn btn-primary button">确认更换</button>
+									</div>
+								<div class="toggle">
+									更换头像
+								</div>
+							</div>
+						</div>
+						<div class="user-info">
+							<div class="inline">
+								<span class="label label-info">昵称:</span> <span class="name u_name" th:text="${user?.name}"></span>
+							</div>
+							<div class="inline">
+								<span class="label label-info">院校:</span> <span class="name u_campus" th:text="${user?.campus}"></span>
+							</div>
+							<div class="inline">
+                                <span class="label label-info">信用积分等级:</span>
+                                <span class="fa fa-star" th:if="${user?.credit>=20}"></span>
+                                <span class="fa fa-star" th:if="${user?.credit>=40}"></span>
+                                <span class="fa fa-star" th:if="${user?.credit>=60}"></span>
+                                <span class="fa fa-star" th:if="${user?.credit>=80}"></span>
+                                <span class="fa fa-star" th:if="${user?.credit>=100}"></span>
+							</div>
+							<div class="inline">
+								<span class="label label-info">个性签名:</span> <span class="name u_sign" th:text="${user?.sign}"></span>
+							</div>
+						</div>
+
+					</div>
+					<ul class="nav nav-tabs nav-justified">
+						<li role="presentation" class="active"><a data-toggle="tab"
+							href="#user-info">个人资料</a></li>
+						<li role="presentation"><a data-toggle="tab" href="#goods">我的商品</a></li>
+						<li role="presentation"><a data-toggle="tab" href="#needs">我的求购</a></li>
+                        <li role="presentation"><a data-toggle="tab" href="#buy">我的购买</a></li>
+						<li role="presentation"><a data-toggle="tab" href="#collection">我的收藏</a></li>
+						<li role="presentation"><a data-toggle="tab" href="#msg">消息中心<span class="badge" th:if="${user?.msg!=null&&(user.msg.userCount+user.msg.sysCount)!=0}" th:text="${user.msg.userCount+user.msg.sysCount}"></span></a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="user-info" class="tab-pane fade in active">
+							<div id="account" class="block">
+								<div class="block-header">
+									<span class="title">账户信息</span>
+									<span onclick="changeAccountInfo('Acc')" class="fa fa-pencil-square-o edit"></span>
+								</div>
+								<div class="block-body">
+									<span class="line form-group">
+										<span class="key">昵称</span>
+										<input class="value" type="text" name="Name" th:value="${user?.name}" readonly/>
+									</span>
+									<span class="line form-group">
+										<span class="key">院校</span>
+										<input class="value" type="text" name="campus" th:value="${user?.campus}" readonly>
+									</span>
+									<span class="line form-group">
+										<span class="key">个性签名</span>
+										<textarea class="value textarea" rows="3" name="sign" th:text="${user?.sign}" readonly></textarea>
+									</span>
+									<span id="submitAcc" class="line text-center hide">
+										<span onclick="submitChangeInfo('Acc')" class="btn btn-primary space">确认修改</span>
+										<span onclick="cancelReset('Acc')"class="btn btn-default space">取消</span>
+									</span>
+								</div>
+							</div>
+							<div id="person" class="block">
+								<div class="block-header">
+									<span class="title">基本信息</span>
+									<span onclick="changeAccountInfo('Per')" class="fa fa-pencil-square-o edit"></span>
+								</div>
+								<div class="block-body">
+									<span class="line">
+										<span class="key">性别</span>
+										<span class="value-sex">
+											<label class="radio-inline">
+                                                <input type="radio" name="sex" value="男" disabled th:if="${user?.sex=='男'}" checked >
+                                                <input type="radio" name="sex" value="男"  th:if="${user?.sex!='男'}" disabled > 男
+											</label>
+											<label class="radio-inline">
+                                                <input type="radio" name="sex" value="女" disabled th:if="${user?.sex=='女'}" checked >
+  												<input type="radio" name="sex" value="女" disabled th:if="${user?.sex!='女'}" > 女
+											</label>
+										</span>
+									</span>
+									<span class="line form-group">
+										<span class="key">手机号</span>
+										<input class="value" name="phone" type="text"  th:value="${user?.phone}" readonly>
+									</span>
+                                    <span class="line form-group">
+										<span class="key">邮箱</span>
+										<input class="value" name="mail" type="text"  th:value="${user?.mail}" readonly>
+									</span>
+									<span class="line form-group">
+										<span class="key">QQ</span>
+										<input class="value" name="qq" type="text"  th:value="${user?.qq}" readonly>
+									</span>
+									<span class="line form-group">
+										<span class="key">微信</span>
+										<input class="value" name="wechat" type="text"  th:value="${user?.wechat}" readonly>
+									</span>
+									<span id="submitPer" class="line text-center hide">
+										<span onclick="submitChangeInfo('Per')"class="btn btn-primary space">确认修改</span>
+										<span onclick="cancelReset('Per')" class="btn btn-default space">取消</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="goods" class="tab-pane fade" >
+                            <div th:each="good:${sell}" >
+							    <div class="good" th:id="${'good'+good.id}"  >
+								    <div class="pic">
+									    <img class="goodsPic" onerror="src='http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/default.png'" th:src="@{'http://unrestraint.oss-cn-beijing.aliyuncs.com/'+${good.pic[0]}}">
+								    </div>
+								    <div class="detail">
+									<span class="line" th:onclick="'javascript:hrefGood('+${good.id}+')'">
+										<span class="key">
+											<span class="label label-info">商品名称</span>
+										</span>
+										<span class="value" th:text="${good.title}">
+										</span>
+									</span>
+									<span class="line">
+										<span class="key">
+											<span class="label label-info">简介</span>
+										</span>
+										<span class="value" th:text="${good.info}">
+										</span>
+									</span>
+									<span class="line">
+										<span class="key">
+											<span class="label label-info">商品状态</span>
+										</span>
+										<span class="value" th:text="${good.status}">
+										</span>
+									</span>
+									<span class="line bottom">
+										<input type="button" class="btn btn-danger" th:onclick="'javascript:deleteGood(\'good\','+${good.id}+')'"  th:if="${good.status=='出售'}" value="删除">
+										<input type="button" class="btn btn-warning" th:onclick="'javascript:off('+${good.id}+',this)'"  th:if="${good.status=='出售'}" value="下架">
+										<input type="button" class="btn btn-primary repost"  th:onclick="'javascript:repost('+${good.id}+',this)'"  th:if="${good.status=='出售'}" value="擦亮">
+
+                                        <input type="button" class="btn btn-danger del" th:onclick="'javascript:deleteGood(\'good\','+${good.id}+')'"  th:if="${good.status=='正在交易'}" value="删除" style="display: none;">
+										<input type="button" class="btn btn-warning off" th:onclick="'javascript:off('+${good.id}+',this)'" th:if="${good.status=='正在交易'}"  value="下架" style="display: none;">
+										<input type="button" class="btn btn-primary repost"  th:onclick="'javascript:repost('+${good.id}+',this)'"  th:if="${good.status=='正在交易'}" value="擦亮" style="display: none;">
+
+                                        <input type="button" class="btn btn-danger" th:onclick="'javascript:failure('+${good.id}+',this)'"  th:if="${good.status=='正在交易'}" value="取消交易">
+                                        <input type="button" class="btn btn-primary" th:onclick="'javascript:success('+${good.id}+',this)'" th:if="${good.status=='正在交易'}" value="交易成功">
+									</span>
+								    </div>
+							    </div>
+                            </div>
+                            <div th:each="good:${sold}" >
+                                <div class="good" th:id="${'sold'+good.id}">
+                                    <div class="pic">
+                                        <img class="goodsPic" onerror="src='http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/default.png'" th:src="@{'http://unrestraint.oss-cn-beijing.aliyuncs.com/'+${good.pic[0]}}">
+                                    </div>
+                                    <div class="detail">
+									<span class="line" th:onclick="'javascript:hrefGood('+${good.id}+')'">
+										<span class="key">
+											<span class="label label-info">商品名称</span>
+										</span>
+										<span class="value" th:text="${good.title}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info">简介</span>
+										</span>
+										<span class="value" th:text="${good.info}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info">商品状态</span>
+										</span>
+										<span class="value" th:text="${good.status}">
+										</span>
+									</span>
+                                        <span class="line bottom">
+                                            <input type="button" th:onclick="'javascript:deleteGood(\'sold\','+${good.id}+')'"  class="btn btn-danger" value="删除">
+									    <input type="button" th:onclick="'javascript:rePostGood('+${good.id}+',this)'" th:if="${good.status=='下架'}"  class="btn btn-primary" value="上架">
+
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+						<div id="needs" class="tab-pane fade">
+                            <div  th:each="good:${want}" >
+							<div class="good" th:id="${'want'+good.id}">
+								<div class="detail">
+									<span class="line">
+										<span class="key">
+											<span class="label label-info">求购物品</span>
+										</span>
+										<span class="value" th:text="${good.title}"></span>
+									</span>
+									<span class="line">
+										<span class="key">
+											<span class="label label-info">补充说明</span>
+										</span>
+										<span class="value" th:text="${good.info}">
+										</span>
+									</span>
+									<span class="line">
+										<span class="key">
+											<span class="label label-info">状态</span>
+										</span>
+										<span class="value" th:text="${good.status}">
+										</span>
+									</span>
+									<span class="line bottom">
+										<input type="button" class="btn btn-danger" th:onclick="'javascript:deleteGood(\'want\','+${good.id}+')'" value="删除">
+										<input type="button" class="btn btn-primary" th:onclick="'javascript:repost('+${good.id}+',this)'" value="擦亮">
+									</span>
+								</div>
+							</div>
+                            </div>
+						</div>
+                        <div id="buy" class="tab-pane fade">
+                            <div  th:each="good:${buy}" >
+                                <div class="good" th:id="${'buy'+good.id}">
+									<div class="pic">
+										<img class="goodsPic" onerror="src='http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/default.png'" th:src="@{'http://unrestraint.oss-cn-beijing.aliyuncs.com/'+${good.pic[0]}}">
+									</div>
+                                    <div class="detail">
+									<span class="line" th:onclick="'javascript:hrefGood('+${good.id}+')'">
+										<span class="key">
+											<span class="label label-info">商品名称</span>
+										</span>
+										<span class="value" th:text="${good.title}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info">补充说明</span>
+										</span>
+										<span class="value" th:text="${good.info}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info" >商品状态</span>
+										</span>
+										<span class="value" th:text="${good.status}">
+										</span>
+									</span>
+                                        <span class="line bottom">
+										<!--<input type="button" class="btn btn-danger" value="删除">-->
+										<!--<input type="button" class="btn btn-primary" value="擦亮">-->
+									</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  th:each="good:${bought}" >
+                                <div class="good" th:id="${'bought'+good.id}">
+                                    <div class="pic">
+                                        <img class="goodsPic" onerror="src='http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/default.png'" th:src="@{'http://unrestraint.oss-cn-beijing.aliyuncs.com/'+${good.pic[0]}}">
+                                    </div>
+                                    <div class="detail">
+									<span class="line" th:onclick="'javascript:hrefGood('+${good.id}+')'">
+										<span class="key">
+											<span class="label label-info">商品名称</span>
+										</span>
+										<span class="value" th:text="${good.title}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info">补充说明</span>
+										</span>
+										<span class="value" th:text="${good.info}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info" >商品状态</span>
+										</span>
+										<span class="value">购买成功
+										</span>
+									</span>
+                                        <span class="line bottom">
+										    <input type="button" th:onclick="'javascript:deleteBought(\'bought\','+${good.id}+')'"   class="btn btn-danger" value="删除">
+									    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="collection" class="tab-pane fade">
+                            <div  th:each="good:${like}">
+                                <div class="good" th:id="${'coll'+good.id}">
+                                    <div class="pic">
+                                        <img class="goodsPic" onerror="src='http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/default.png'" th:src="@{'http://unrestraint.oss-cn-beijing.aliyuncs.com/'+${good.pic[0]}}">
+                                    </div>
+                                    <div class="detail">
+									<span class="line" th:onclick="'javascript:hrefGood('+${good.id}+')'">
+										<span class="key">
+											<span class="label label-info">商品名称</span>
+										</span>
+										<span class="value" th:text="${good.title}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info">简介</span>
+										</span>
+										<span class="value" th:text="${good.info}">
+										</span>
+									</span>
+                                        <span class="line">
+										<span class="key">
+											<span class="label label-info" >商品状态</span>
+										</span>
+										<span class="value" th:text="${good.status}">
+										</span>
+									</span>
+                                        <span class="line bottom">
+										<input type="button" class="btn btn-warning" th:onclick="'javascript:delLike('+${good.id}+')'" value="取消收藏">
+									</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+						<div id="msg" class="tab-pane fade">
+                            <div th:if="${user?.msg!=null&&user?.msg.user!=null&&user?.msg.userCount!=0}">
+							    <div class="msg" data-toggle="modal" data-target="#msg_modal">
+								<div class="msg-header">
+									<span class="name">互动消息</span>
+								</div>
+								<div class="msg-body" >
+									您有新的消息,点击查看!
+									<span class="badge count" th:text="${user?.msg.userCount}"></span>
+								</div>
+							    </div>
+                            </div>
+                            <div th:if="${user?.msg!=null}" >
+							<div th:each="msg:${user.msg.sys}">
+							<div class="msg" th:id="${msg.mid}">
+								<span class="fa fa-times dismiss" th:onclick="'javascript:remove(\''+${msg.mid}+'\',\'sys\')'"></span>
+								<div class="msg-header">
+									<span class="name" th:utext="${msg.title}"></span>
+									<span class="time" th:text="${#dates.format(msg.date, 'yyyy-MM-dd HH:mm:ss')}"></span>
+								</div>
+								<div class="msg-body" th:text="${msg.text}">
+								</div>
+							</div>
+							</div>
+                            </div>
+						</div>
+
+
+					</div>
+
+				<div id="msg_modal" class="modal fade" tabindex="-1" role="dialog">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">互动消息</h4>
+						</div>
+                        <div class="modal-content" th:if="${user?.msg!=null&&user?.msg.user!=null}">
+                        <div  th:each="msg:${user.msg.user}">
+						<div class="msg" th:id="${msg.mid}">
+                            <span class="fa fa-times dismiss" th:onclick="'javascript:remove(\''+${msg.mid}+'\',\'user\')'"></span>
+							<div class="msg-area">
+								<div class="title" th:utext="${msg.title}"></div>
+								<span class="text" th:text="${msg.text}"></span>
+							</div>
+						</div>
+                        </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+				<div class="conter-bottom ">
+					<div class="bottom-top">
+						<div class="bottom-brand">
+							<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/logo.jpg"  height=65px; width=65px;  alt="src" />
+						</div>
+
+						<div class="bottom-introduce" >
+							<p align="left" >联系我们/contact us<br>
+								QQ 群:783084010<br>
+								QQ  :1057198259</p>
+							<div class="code">
+								<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/code.png" height=75px; width=75px>
+							</div>
+						</div>
+
+					</div>
+					<div class="bottom-footer" align="center">
+						<!-- 底部固定区域 -->
+						&copyCopyright 易二易 - Campus
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边)-->
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>
+	<script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+	<script>
+        $(document).ready(function(){
+            $(".body-loading").remove();
+            var e1 = document.getElementById('userPic');
+            $('#userPic').onload=size(e1,180,180);
+            $('.goodsPic').each(function(){
+                size(this,140,140);
+            });
+        });
+	</script>
+        <script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/config.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/vueComponents/CommonComponents.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/userManage.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/user.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/lib/plupload-2.1.2/js/plupload.full.min.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/userUpload.js"></script>
+</body>
+</html>

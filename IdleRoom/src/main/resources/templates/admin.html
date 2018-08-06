@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>易二易-管理后台</title>
+    <!-- href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static"-->
+  <link rel="stylesheet" href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/layui.css">
+<style>
+    .center {
+        width:300px;
+        height:36px;
+        margin:0 auto;
+    }
+</style>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo" ><a href="javascript:location.reload();" class="layui-logo"><h3><b>易二易-管理后台</b></h3></a></div>
+
+
+
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="/u">个人中心</a>
+        </li>
+      <!--<li class="layui-nav-item">-->
+        <!--<a href="javascript:;">-->
+          <!--<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/icon/Koala.jpg" class="layui-nav-img">-->
+          <!--方方-->
+        <!--</a>-->
+        <!--<dl class="layui-nav-child">-->
+          <!--<dd><a href="/u">个人中心</a></dd>-->
+          <!--<dd><a href="/" onclick="logOut()">退出</a></dd>-->
+        <!--</dl>-->
+      <!--</li>-->
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item">
+            <a href="javascript:;" onclick="renderContent(user_manager)" ondblclick="listUser('/admin/listUser',userInfo_template)" >用户管理</a>
+        </li>  
+        <li class="layui-nav-item ">
+          <a class="" href="javascript:;">商品管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;" onclick="renderContent(good_manager)" ondblclick="listGood()" >二手商品</a></dd>
+            <dd><a href="javascript:;" onclick="renderContent(good_manager) " ondblclick="listWant()">二手求购</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;" >举报管理</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;" onclick="listOpenReport()" >待审核</a></dd>
+                <dd><a href="javascript:;" onclick="listCloseReport() " >已审核</a></dd>
+            </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div id = "content" class="layui-body" style="padding-top: 40px;">
+    <!-- 内容主体区域 -->
+
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © Copyright 易二易 - Campus
+  </div>
+</div>
+
+
+<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/layui.js"></script>
+<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/admin.js"></script>
+</body>
+
+<!-- 用户管理模板 -->
+<script id="user_manager" type = "text/html">
+    <div id="userPage">
+        <div class="layui-input-block" style="margin-left:0px;">
+            <div class="center">
+                <input  id="id" type="text" name="search" placeholder="请输入用户账号" class="layui-input" style="width: 200px;float:left">
+                <button class="layui-btn layui-btn-normal layui-btn-sm" style="margin-left:10px;float:left;height: 38px;width: 60px;" onclick="get('/admin/getUser',userInfo_template)"> 查询 </button>
+            </div>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="40">
+                    <col width="150">
+                    <col width="150">
+                    <col width="150">
+                    <col width="150">
+                    <col width="150">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户账号</th>
+                    <th>密码</th>
+                    <th>手机</th>
+                    <th>邮箱</th>
+                    <th>微信</th>
+                    <th>QQ</th>
+                    <th>角色</th>
+                    <th>注册时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="info">
+                <!-- 用户信息-->
+
+
+                </tbody>
+            </table>
+            <div id="page" class="center"></div>
+        </div>
+    </div>
+
+</script>
+<!-- 用户信息模板 -->
+<script id="userInfo_template" type="text/html">
+    <tr  id={{d.id}}>
+        <td>{{d.id}}</td>
+        <td>{{d.name}}</td>
+        <td>{{d.pwd}}</td>
+        <td>{{d.phone||''}}</td>
+        <td>{{d.mail||''}}</td>
+        <td>{{d.wechat||''}}</td>
+        <td>{{d.qq||''}}</td>
+        <td>{{d.type}}</td>
+        <td>{{d.date}}</td>
+        <td>
+            <button class="layui-btn layui-btn-normal layui-btn-sm update"><i class="layui-icon">&#xe642</i> 修改</button>
+            {{# if(d.type=="封禁"){ }}
+                <button class="layui-btn layui-btn-sm _closure"><i class="layui-icon">&#xe605</i> 解封</button>
+            {{# } else { }}
+                <button class="layui-btn layui-btn-danger layui-btn-sm closure"><i class="layui-icon">&#x1006</i> 封禁</button>
+            {{#} }}
+        </td>
+    </tr>
+</script>
+
+<!-- 修改用户信息的弹窗模板 -->
+<script id="change_info" type="text/html">
+    <div id='_'+{{d.id}}>
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号</label>
+                <input class="layui-input" type="text" placeholder="未填写" style="width: 200px;" value={{d.name}}>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <input class="layui-input" type="text"  placeholder="未填写" style="width: 200px;" value={{d.pwd}}>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机</label>
+                <input class="layui-input" type="text" placeholder="未填写" style="width: 200px;" value={{d.phone}}>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <input class="layui-input" type="text" placeholder="未填写" style="width: 200px;" value={{d.mail}}>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">微信</label>
+                <input class="layui-input" type="text" placeholder="未填写" style="width: 200px;" value={{d.wechat}}>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">QQ</label>
+                <input class="layui-input" type="text"  placeholder="未填写" style="width: 200px;" value={{d.qq}}>
+            </div>
+            <div class="layui-form-item" >
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-block">
+                    {{# if(d.type=="普通"){ }}
+                    <input type="radio" name="role" value="普通" title="普通" style="display: none;" checked="">
+                    {{# } else { }}
+                    <input type="radio" name="role" value="普通" title="普通" style="display: none;">
+                    {{#} }}
+                    {{# if(d.type=="管理员"){ }}
+                    <input type="radio" name="role" value="管理员" title="管理员" style="display: none;" checked="">
+                    {{# } else { }}
+                    <input type="radio" name="role" value="管理员" title="管理员" style="display: none;">
+                    {{#} }}
+                    {{# if(d.type=="封禁"){ }}
+                    <input type="radio" name="role" value="封禁" title="封禁" style="display: none;" checked="">
+                    {{# } else { }}
+                    <input type="radio" name="role" value="封禁" title="封禁" style="display: none;">
+                    {{#} }}
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+
+<!-- 二手商品管理 -->
+<script id="good_manager" type="text/html">
+    <div class="layui-input-block" style="margin-left: 0px">
+        <div class="center">
+            <input id="id" type="text" name="search" placeholder="请输入商品或求购ID" class="layui-input" style="width: 200px;float:left">
+            <button class="layui-btn layui-btn-normal layui-btn-sm" style="margin-left:10px;float:left;height: 38px;width: 60px;" onclick="get('/i',goodInfo_template)"> 查询 </button>
+        </div>
+    </div>
+        <div class="layui-form">
+            <table class="layui-table">
+            <colgroup>
+                <col width="40">
+                <col width="100">
+                <col width="70">
+                <col width="300">
+                <col width="50">
+                <col width="50">
+                <col width="100">
+                <col width="100">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>商品ID</th>
+                    <th>商品名称</th>
+                    <th>商品分类</th>
+                    <th>商品描述</th>
+                    <th>状态</th>
+                    <th>价格</th>
+                    <th>发布时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="info">
+
+            </tbody>
+            </table>
+            <div id="page" class="center"></div>
+        </div>
+</script>
+
+<!-- 商品信息模板 -->
+<script id="goodInfo_template" type="text/html">
+    <tr id= {{d.id}} >
+        <td>{{d.id}}</td>
+        <td>{{d.title}}</td>
+        <td>{{d.type}}</td>
+        <td>{{d.info}}</td>
+        <td>{{d.status}}</td>
+        <td>{{d.price}}</td>
+        <td>{{d.date}}</td>
+        <td>
+            {{# if(d.status=="出售"||d.status=="正在交易"){ }}
+            <button class="layui-btn layui-btn-normal layui-btn-sm off"> 下架 </button>
+            {{# } else if(d.target=="出售"){ }}
+            <button class="layui-btn layui-btn-sm layui-btn-disabled"> 下架 </button>
+            {{#} }}
+
+            {{# if(d.status!="删除"){ }}
+                <button class="layui-btn layui-btn-danger layui-btn-sm delete"> 删除 </button>
+            {{# } else { }}
+                <button class="layui-btn layui-btn-sm layui-btn-disabled"> 删除 </button>
+            {{#} }}
+        </td>
+    </tr>
+</script>
+
+
+<!-- 举报信息处理模板 -->
+<script id="report_manager" type="text/html">
+    <div class="layui-form">
+        <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-danger layui-btn-xm" data-type="direct" data-events="del" style="margin-left:20px;" onclick="delReport()">删除所选</button>
+        </div>
+        <table class="layui-table">
+            <colgroup>
+                <col width="40">
+                <col width="80">
+                <col width="80">
+                <col width="70">
+                <col width="450">
+                <col width="150">
+                <col width="80">
+                <col width="100">
+                <col>
+            </colgroup>
+            <thead >
+            <tr>
+                <th><input type="checkbox" id="all" name="all" class="layui-table" onclick="checkAll()"></th>
+                <th>举报ID</th>
+                <th>被举报人</th>
+                <th>举报类型</th>
+                <th>举报原因</th>
+                <th>时间</th>
+                <th>举报人</th>
+                <th>审核状态</th>
+            </tr>
+            </thead>
+            <tbody id = "info">
+
+            </tbody>
+        </table>
+        <div id="page" class="center"></div>
+    </div>
+</script>
+
+<script id="reportInfo_template" type="text/html">
+    <tr id={{d.id}}>
+        <td><input type="checkbox" value="3" class="layui-table check-box" name="check-box"></td>
+        <td>{{d.target}}</td>
+        <td>{{d.who}}</td>
+        <td>{{d.type}}</td>
+        <td>{{d.text}}</td>
+        <td>{{d.date}}</td>
+        <td>{{d.informer}}</td>
+        <td>
+            {{# if(d.status=="待审核"){ }}
+                <button class="layui-btn layui-btn-danger layui-btn-sm uncheck">待审核</button>
+            {{# } else if(d.status=="已审核"){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm">已审核</button>
+            {{# }else { }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm layui-btn-disabled">{{d.status}}</button>
+            {{# } }}
+        </td>
+    </tr>
+</script>
+</html>

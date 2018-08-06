@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>易二易-购物</title>
+<link
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/font-awesome.min.css" rel="stylesheet">
+<link href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/main.css" rel="stylesheet">
+</head>
+<!-- href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static"-->
+<body>
+	<div class="body-loading">
+		<div class="area-center">
+			<div class="spinner"></div>
+		</div>
+	</div>
+	<nav id="nav" class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">易二易</a>
+				</div>
+					<ul class="nav navbar-nav">
+						<li class=""><a class="mode" href="/b">校园二手</a></li>
+						<li class=""><a class="mode" href="/w">校园求购</a></li>
+					</ul>
+					<ul id="classify"  class="nav navbar-nav" data-type="goods">
+						<li class="cascade">
+						<a class="title" onclick="common.goClassify('*',0);">所有分类</a>
+							<ul class="cascade-menu unspread">
+								<classifyparent v-for="firstmenu in allClass" :firstmenu="firstmenu"></classifyparent>
+							</ul>
+						</li>
+					</ul>
+					<div id="search" class="navbar-form navbar-left">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+						<button type="button" class="btn btn-primary" onclick="common.search();">搜索</button>
+					</div>
+					<ul id="inner-box" class="inner-box nav navbar-nav navbar-right">
+					</ul>
+				</div>
+			<!-- /.container-fluid -->
+		</nav>
+
+		<div class="clearfix"></div>
+
+	<div class="flow-groups">
+		<div class="group">
+			<span class="group-btn" data-toggle="modal"  onclick="goods.check()">发布商品</span>
+		</div>
+	</div>
+		<div id="new" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false"role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title text-center">hello亲爱的用户
+							快发布你的商品信息吧</h4>
+					</div>
+					<hr style="margin: 0 auto; width: 80%">
+					<div class="row">
+						<p class="text-center modal-tip">请认真填写一下信息，有助于你的商品更快找到新主人</p>
+					</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-5 text-center">
+							<div id="uppic" class="uppic">
+								<div class="uppic-content">
+									 <span id="selectfiles"
+										class="btn btn-success up-tip">上传<br>(传错请重选)
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="postProduct" class="form-horizontal col-xs-7">
+							<div class="form-group">
+								<label for="Name" class="col-xs-3 control-label">商品名称</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" id="Name" name="Name"
+										placeholder="商品名称（必填）">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="price" class="col-xs-3 control-label">商品价格</label>
+								<div class="col-xs-5">
+									<input type="number" class="form-control" id="price" name="price"
+										placeholder="商品价格（必填）">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="classify" class="col-xs-3 control-label">所属分类</label>
+								<div class="col-xs-4">
+									<select id="modal_classify" class="form-control">
+										<option v-for="item in items" :value="item">{{item}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-xs-3 control-label">商品简介</label>
+								<div class="col-xs-8">
+									<textarea id="modal_instruct" class="form-control" rows="5" name="ins"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="progress">
+								<div id="uppic-progress-now" class="progress-bar progress-bar-striped"
+									role="progressbar" style="min-width:2%;width: 0%;">0%
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 text-center">
+							<button id="submitgoods" class="btn btn-info">完成并提交</button>
+						</div>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+		</div>
+	<div class="shop-body">
+		<div class="shop-body-page">
+			<div class="page-main">
+				<div id="recommend" class="left">
+						<span class="head">商品推荐</span>
+						<div class="body">
+							<div class="content">
+								<div v-show="loading_rec" class="tip-box" style="height:600px;padding:270px 0;">
+								<div class="sk-circle">
+									<div class="sk-circle1 sk-child"></div>
+									<div class="sk-circle2 sk-child"></div>
+									<div class="sk-circle3 sk-child"></div>
+									<div class="sk-circle4 sk-child"></div>
+									<div class="sk-circle5 sk-child"></div>
+									<div class="sk-circle6 sk-child"></div>
+									<div class="sk-circle7 sk-child"></div>
+									<div class="sk-circle8 sk-child"></div>
+									<div class="sk-circle9 sk-child"></div>
+									<div class="sk-circle10 sk-child"></div>
+									<div class="sk-circle11 sk-child"></div>
+									<div class="sk-circle12 sk-child"></div>
+								</div>
+								</div>
+								<div v-if="reset">
+									<recommend v-for="rec_info in rec_list" :rec_info="rec_info"></recommend>
+								</div>
+							</div>
+						</div>
+						<span class="footer"> <span @click="changeRec()" class="change-rec"> <span
+								class="fa fa-refresh"></span> <span>换一批</span>
+						</span>
+						</span>
+				</div>
+				<div id="list" class="right">
+						<position :routes="routes"></position>
+						<div class="animate-wrap" v-show="loading_page">
+							<div class="double-bounce1"></div>
+							<div class="double-bounce2"></div>
+						</div>
+						<div v-if="jumppage">
+							<product v-for="pro in pros" :pro="pro"></product>
+						</div>
+						<pagecode :allpage="allpage" :currentpage="current"></pagecode>
+				</div>
+			</div>
+			<div class="conter-bottom ">
+				<div class="bottom-top">
+					<div class="bottom-brand">
+						<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/logo.jpg"  height=65px; width=65px;  alt="src" />
+					</div>
+
+					<div class="bottom-introduce" >
+						<p align="left" >联系我们/contact us<br>
+							QQ 群:783084010<br>
+							QQ  :1057198259</p>
+						<div class="code">
+							<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/code.png" height=75px; width=75px>
+						</div>
+					</div>
+
+				</div>
+				<div class="bottom-footer" align="center">
+					<!-- 底部固定区域 -->
+					&copyCopyright 易二易 - Campus
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边)-->
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$(".body-loading").remove();
+		});
+	</script>
+    <script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/config.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/userManage.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/vueComponents/CommonComponents.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/common.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/vueComponents/goodsComponents.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/goodsMain.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/lib/plupload-2.1.2/js/plupload.full.min.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/upload.js"></script>
+</body>
+</html>

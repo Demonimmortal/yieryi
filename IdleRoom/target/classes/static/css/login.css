@@ -1,0 +1,125 @@
+@CHARSET "UTF-8";
+* {
+	margin: 0;
+	padding: 0
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+	min-width: 1000px;
+	min-height: 600px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	background-repeat: no-repeat;
+	background-image: url("/static/images/login.jpg");
+	background-size: cover;
+	background-position: center;
+}
+
+.login-wrap {
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	line-height: 100%;
+	position: relative;
+}
+
+.login-wrap .login-main {
+	border-radius:5px;
+	background-color:rgba(255,255,255,0.5);
+	width: 350px;
+	position: absolute;
+	right: 10%;
+	top: 50%;
+	transform: translate(0, -50%);
+}
+
+.login-wrap .login-main .login-footer {
+	width:350px;
+	margin-top:1em;
+	text-align:right;
+	font-size: 0.5em;
+}
+.login-wrap .login-main .login-footer:after{
+	content:".";
+	display:block;
+	height:0;
+	visibility:hidden;
+	clear:both;
+}
+.login-wrap .login-main .login-footer ul {
+	margin-right: 1em;
+	float: right;
+}
+
+.login-wrap .login-main .login-footer ul li {
+	float: left;
+	list-style: none;
+}
+
+.login-wrap .login-main .login-main-body {
+	padding-top: 30px;
+	padding-bottom: 13px;
+}
+
+.login-wrap .login-main .login-title {
+	padding-top: 30px;
+	font-weight: bold;
+}
+
+.login-wrap .login-main .login-tip {
+	padding-top: 20px;
+	font-size: 1.1em;
+}
+.has-feedback .form-control {
+	padding: 6px 12px;
+}
+.form-control[disabled] {
+	background-color: #5bc0de;
+	opacity: 1;
+}
+.submit-shade{
+	display:block;
+	width:100%;
+	height:100%;
+	z-index:1400;
+	position:fixed;
+	top:0;
+	background:rgba(0,0,0,0.3);
+	transition:0.3s;
+}
+.submit-shade .tip-box{
+	position:absolute;
+	padding:15px 0;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
+	border-radius:10px;
+	background:rgba(255,255,255,0.8);
+}
+.submit-shade .tip-box .tip-text{
+	line-height:30px;
+	padding:10px;
+	text-align:center;
+	color:#555;
+	font-size:20px;
+}
+.submit-shade .tip-box>#logo{
+	display:block;
+	margin: 0 auto;
+	width: 40px;
+	height: 40px;
+	text-align:center;
+	line-height:40px;
+	font-size:35px;
+}
+.submit-shade .tip-box>#logo.success{
+	color:#583;
+}
+.submit-shade .tip-box>#logo.failed{
+	color:#f01;
+}
+.submit-shade .tip-box>#logo.warning{
+	color:#f83;
+}

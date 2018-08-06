@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>易二易-购物-详情</title>
+<link
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/font-awesome.min.css" rel="stylesheet">
+<link href="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+		<div class="body-loading">
+			<div class="area-center">
+				<div class="spinner"></div>
+			</div>
+		</div>
+		<nav id="nav" class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">易二易</a>
+				</div>
+					<ul class="nav navbar-nav">
+						<li class=""><a class="mode" href="/b">校园二手</a></li>
+						<li class=""><a class="mode" href="/w">校园求购</a></li>
+					</ul>
+					<!--<ul id="classify"  class="nav navbar-nav" data-type="goods">-->
+						<!--<li class="cascade">-->
+						<!--<a onclick="common.clickActive(this)" class="title" data-toggle="#first">所有分类</a>-->
+							<!--<ul id="first" class="cascade-menu unspread">-->
+								<!--<classifyparent v-for="firstmenu in allClass" :firstmenu="firstmenu"></classifyparent>-->
+							<!--</ul>-->
+						<!--</li>-->
+					<!--</ul>-->
+					<!--<form class="navbar-form navbar-left">-->
+						<!--<div class="form-group">-->
+							<!--<input type="text" class="form-control" placeholder="Search">-->
+						<!--</div>-->
+						<!--<button type="submit" class="btn btn-primary" onclick="common.search();">搜索</button>-->
+					<!--</form>-->
+					<ul id="inner-box" class="inner-box nav navbar-nav navbar-right">
+					</ul>
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<div class="clearfix"></div>
+		<div id="report_modal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title text-center">举报</h4>
+				</div>
+				<div class="modal-content">
+					<div class="info_tips">
+						<div class="radio">
+							<label> <input type="radio" name="optionsRadios"
+										   id="option1" value="非法信息" checked> 非法信息（危险武器，毒品，色情暴力）
+							</label>
+						</div>
+						<div class="radio">
+							<label> <input type="radio" name="optionsRadios"
+										   id="option2" value="疑似欺诈"> 疑似欺诈
+							</label>
+						</div>
+						<div class="radio">
+							<label> <input type="radio" name="optionsRadios"
+										   id="option3" value="人身攻击"> 人身攻击
+							</label>
+						</div>
+						<div class="radio">
+							<label> <input type="radio" name="optionsRadios"
+										   id="option4" value="垃圾广告"> 垃圾广告
+							</label>
+						</div>
+					</div>
+					<div class="footer">
+						<button onclick="common.reportSub()" class="btn btn-primary ok">确认</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="shop-body">
+			<div class="shop-body-page">
+				<div class="page-main">
+				<div id="recommend" class="left">
+						<span class="head">商品推荐</span>
+						<div class="body">
+							<div class="content">
+								<div v-show="loading_rec" class="tip-box" style="height:600px;padding:270px 0;">
+								<div class="sk-circle">
+									<div class="sk-circle1 sk-child"></div>
+									<div class="sk-circle2 sk-child"></div>
+									<div class="sk-circle3 sk-child"></div>
+									<div class="sk-circle4 sk-child"></div>
+									<div class="sk-circle5 sk-child"></div>
+									<div class="sk-circle6 sk-child"></div>
+									<div class="sk-circle7 sk-child"></div>
+									<div class="sk-circle8 sk-child"></div>
+									<div class="sk-circle9 sk-child"></div>
+									<div class="sk-circle10 sk-child"></div>
+									<div class="sk-circle11 sk-child"></div>
+									<div class="sk-circle12 sk-child"></div>
+								</div>
+								</div>
+								<div v-if="reset">
+									<recommend v-for="rec_info in rec_list" :rec_info="rec_info"></recommend>
+								</div>
+							</div>
+						</div>
+						<span class="footer"> <span @click="changeRec()" class="change-rec"> <span
+								class="fa fa-refresh"></span> <span>换一批</span>
+						</span>
+						</span>
+				</div>
+					<div id="details" class="right">
+						<position :routes="routes"></position>
+						<div class="animate-wrap" v-show="loading_page">
+							<div class="double-bounce1"></div>
+							<div class="double-bounce2"></div>
+						</div>
+						<div v-if="jumppage">
+							<detailstopblock :picdata="topblockdata"></detailstopblock>
+							<detailsmiddleblock :messagelist="messagelist" :info="info"></detailsmiddleblock>
+						</div>
+						<div v-if="notfound">
+							<span style='color: transparent;-webkit-text-stroke: 1px #777;letter-spacing: 0.04em;font-size: 14px;'> 该商品已删除或不存在！</span>
+						</div>
+   		 			</div>
+				</div>
+				<div class="conter-bottom ">
+					<div class="bottom-top">
+						<div class="bottom-brand">
+							<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/logo.jpg"  height=65px; width=65px;  alt="src" />
+						</div>
+
+						<div class="bottom-introduce" >
+							<p align="left" >联系我们/contact us<br>
+								QQ 群:783084010<br>
+								QQ  :1057198259</p>
+							<div class="code">
+								<img src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/images/code.png" height=75px; width=75px>
+							</div>
+						</div>
+
+					</div>
+					<div class="bottom-footer" align="center">
+						<!-- 底部固定区域 -->
+						&copyCopyright 易二易 - Campus
+					</div>
+
+				</div>
+			</div>
+		</div>
+	<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边)-->
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+	<script>
+	$(document).ready(function(){
+		$(".body-loading").remove();
+	});
+	</script>
+		<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/config.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/userManage.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/vueComponents/CommonComponents.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/vueComponents/detailsComponents.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/common.js"></script>
+	<script src="http://unrestraint.oss-cn-beijing.aliyuncs.com/static/js/goodsdetail.js"></script>
+
+</body>
+</html>
