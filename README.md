@@ -3,3 +3,4 @@
 初次使用请先用maven导入所有依赖包
 eclipse右键pom.xml文件run-build选项，键入参数spring-boot:run运行。idea类似
 项目访问入口为localhost:8080
+访问出错，可能是集群问题，请联系我13468725773@163.com
